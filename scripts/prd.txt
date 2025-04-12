@@ -1,0 +1,302 @@
+<context>
+# Overview
+Bible Connect is a unique productivity and spiritual growth application that encourages users to engage with physical Scripture before accessing potentially distracting digital content. Using AI-powered camera verification, the app confirms real Bible interaction before unlocking selected applications, helping users prioritize spiritual discipline in their daily routine.
+
+Bible Connect blocks access to distracting apps until users physically touch their Bible. The app uses AI-powered camera scanning to confirm Bible interaction, then unlocks selected apps until the next day.
+
+Our vision is to transform the relationship between digital consumption and spiritual discipline by creating a seamless bridge between physical Scripture and digital device usage.
+
+# Core Features
+
+## Simple Bible Verification
+- **What it does:** Uses phone camera to scan and verify physical Bible text
+- **Why it's important:** Creates accountability and ensures authentic Bible engagement
+- **How it works:** AI immediately verifies Bible text patterns and formatting in under 3 seconds, without storing any images or content
+
+## Customizable App Blocking
+- **What it does:** Allows users to select which apps to block until Bible verification
+- **Why it's important:** Provides personalized control over digital distractions
+- **How it works:** Users select specific apps or categories to block, with granular time-based controls and emergency override options
+
+## Smart Notification System
+- **What it does:** Delivers timely reminders for Bible engagement
+- **Why it's important:** Builds consistent habits through gentle accountability
+- **How it works:** Customizable notifications include morning reminders, gentle prompts when attempting to use blocked apps, and progress reports
+
+## Simplified Discipline Levels
+- **What it does:** Offers tiered engagement requirements based on commitment level
+- **Why it's important:** Accommodates various spiritual maturity levels and gradually builds habit strength
+- **How it works:** Options range from beginner (single Bible page scan) to committed (three different page scans) with custom options available
+
+## Scripture Streak Dashboard
+- **What it does:** Tracks and visualizes Bible engagement consistency
+- **Why it's important:** Provides motivation through visible progress
+- **How it works:** Displays clean calendar view with streak tracking, milestone celebrations, and optional sharing for accountability
+
+# User Experience
+
+## User Personas
+- **Disciplined Disciples:** Christians seeking to build consistent Scripture reading habits
+- **Digital Minimalists:** People looking to reduce screen time and digital distractions
+- **Faith-Focused Parents:** Adults wanting to encourage Bible reading in their children
+- **Accountability Groups:** Church groups and small groups focused on spiritual discipline
+- **Digital Strugglers:** Individuals battling digital addiction who want spiritual anchoring
+
+## Key User Flows
+
+### First-Time Setup
+1. Onboarding explains core concept with simple illustrations
+2. Camera permission request with clear privacy explanation
+3. Bible verification test with guided camera positioning
+4. App selection interface with smart categorization
+5. Discipline level selection with visual explanations
+6. Notification preferences with samples shown
+
+### Daily Usage Flow
+1. Morning notification at user-defined time
+2. Bible verification process via camera
+3. Visual confirmation of successful verification
+4. Apps unlock with subtle transition animation
+5. End-of-day summary notification (optional)
+6. Streak updated on dashboard
+
+## UI/UX Considerations
+- Clean, neutral color palette with subtle warm accents
+- Generous whitespace and thoughtful typography hierarchy
+- Conversational, encouraging interface copy
+- Frictionless interaction flows with minimal steps
+- Focus on content over interface elements
+- Subtle animations that enhance rather than distract
+- Accessible design principles throughout
+- Dark mode and light mode options synchronized with system preferences
+- Haptic feedback for meaningful interactions
+</context>
+<PRD>
+# Technical Architecture
+
+## System Components
+- **Camera Integration Module:** Handles device camera access for Bible verification via React Native's camera API
+- **Google Cloud Vision Integration:** Leverages Google's pre-trained OCR model for text recognition instead of custom AI
+- **App Management System:** Controls app blocking through platform-specific APIs
+- **Notification Engine:** Uses device notification systems with React Native's notification libraries
+- **Analytics Dashboard:** Implements lightweight analytics with privacy compliance
+- **User Authentication:** Integrates Clerk for authentication and user management
+- **User Settings Manager:** Handles customization preferences using Expo's SecureStore
+
+## Data Models
+- **User Profile:** Authentication via Clerk, preferences, discipline level settings
+- **App Block List:** User-selected applications to restrict with default suggestions
+- **Verification Records:** Timestamps and hashed text fragments of successful Bible verifications
+- **Streak Data:** Daily engagement tracking with milestone achievements
+- **Notification Preferences:** User-defined timing, content settings and quiet hours
+- **Analytics Consent:** GDPR-compliant user preferences for data collection
+
+## APIs and Integrations
+- **Google Cloud Vision API:** For accurate Bible text recognition and extraction
+- **Clerk Authentication API:** For user management and secure authentication
+- **Platform-specific App Control APIs:** For reliable implementation of app blocking
+- **Expo Notifications API:** For timely reminders and updates
+- **React Router:** For navigation between app screens
+- **NativewindUI:** For consistent UI components and styling
+
+## Infrastructure Requirements
+- **Expo React Native Framework:** Development platform for cross-platform compatibility
+- **Google Cloud Vision API Integration:** For accurate text recognition without custom AI development
+- **TypeScript Implementation:** For type safety and code maintainability
+- **Expo SecureStore:** For secure local data storage
+- **Battery and Memory Optimization:** App should not exceed 200MB memory use or significantly impact battery
+- **Accessibility Compliance:** Supporting dynamic text sizing and proper contrast ratios (≥4.5:1)
+- **Offline Functionality:** Core verification must work without internet connectivity
+
+# Development Roadmap
+
+## MVP Requirements
+- **Core Bible Verification System:**
+  - React Native camera integration with Google Cloud Vision API for text recognition
+  - Verification process with clear visual feedback (completion within 5 seconds)
+  - Support for common Bible formats with 95% recognition accuracy in normal lighting
+  - Privacy-first implementation with text hashing instead of content storage
+  - Manual entry fallback after 3 failed scan attempts
+
+- **Basic App Blocking:**
+  - Selection interface for choosing apps to block with default suggestions
+  - Platform-specific API integration for reliable blocking (98% reliability)
+  - Daily reset functionality (default: 4AM)
+  - Beginner discipline level implementation
+
+- **User Authentication:**
+  - Clerk integration for secure account management
+  - Basic profile settings and preferences
+  - Local data storage with Expo SecureStore
+
+- **Essential Notification System:**
+  - Morning reminder notifications at user-defined times
+  - Blocked app access notifications
+  - Basic streak tracking and milestone celebrations
+
+- **Fundamental User Experience:**
+  - Streamlined onboarding with React Router navigation
+  - Clear camera guidance for successful scans
+  - Simple dashboard showing current streak
+  - Support for iOS 15.0+ and Android 10+
+
+## Future Enhancements
+- **Advanced Verification Features:**
+  - Improved AI accuracy in various lighting conditions
+  - Support for rare Bible editions and languages
+  - More intelligent page differentiation
+
+- **Enhanced App Management:**
+  - Time-based controls for different app categories
+  - Contextual blocking based on location or time of day
+  - Detailed app usage analytics and insights
+
+- **Sophisticated Notification System:**
+  - Adaptive notification timing based on user behavior
+  - Integration with device Do Not Disturb settings
+
+- **Extended Discipline Levels:**
+  - Implementation of Standard and Committed levels
+  - Custom discipline level configuration
+  - Reading plan integration
+
+- **Comprehensive Dashboard:**
+  - Detailed analytics and engagement patterns
+  - Sharable achievements and milestones
+
+- **Monetization Features:**
+  - Premium subscription implementation
+  - Family accountability sharing
+# Logical Dependency Chain
+
+## Foundation Layer (Build First)
+1. **Camera and Bible Verification System:**
+   - Google Cloud Vision API integration (FR1.1-1.7)
+   - Implement text extraction and Bible validation logic
+   - Develop verification process with error handling
+   - Create fallback options for failed scans
+   - This is the central technological foundation everything else depends on
+
+2. **Basic User Profile System with Clerk:**
+   - Clerk authentication integration (FR3.1)
+   - Expo SecureStore implementation for local storage (NFR3.2)
+   - TypeScript interfaces for data models
+   - Core settings management functionality
+   - Required for personalized experience
+
+3. **Simple App Blocking Mechanism:**
+   - Platform-specific API integration for app blocking (FR2.1-2.7)
+   - App selection interface with default suggestions
+   - Basic blocking functionality with reliability testing
+   - Critical for the core value proposition
+
+## Minimum Viable Application Layer
+4. **Essential User Interface with NativewindUI:**
+   - NativewindUI component implementation (TC3)
+   - Onboarding experience with React Router (NFR5.1)
+   - Verification flow screens with clear guidance (NFR5.2)
+   - Dashboard with basic streak display
+   - Focus on creating a complete user flow that meets usability requirements
+   - Implement accessibility features (NFR5.3-5.4)
+
+5. **Basic Notification System:**
+   - Expo Notifications API integration (FR4.1-4.5)
+   - Morning reminders with configurable times
+   - Verification confirmations with haptic feedback
+   - Blocked app attempt notifications
+   - Implementation of quiet hours respect
+
+## Enhancement Layer
+6. **Improved Verification System:**
+   - Performance optimization to meet 5-second verification target (NFR1.2)
+   - Support for multiple Bible formats and languages (NFR8.3-8.4)
+   - Improved recognition accuracy in varying lighting conditions (NFR2.1)
+   - Offline functionality implementation (NFR2.3)
+   - Enhanced feedback with better error messages (NFR5.5)
+
+7. **Extended App Management:**
+   - Discipline level system implementation (FR2.5, FR3.6)
+   - Time-based controls for different app categories
+   - Enhanced blocking mechanisms with 98% reliability (NFR2.5)
+   - Basic usage analytics with GDPR compliance (FR5.1-5.5)
+   - Battery usage optimization (NFR7.3)
+
+8. **Advanced Dashboard:**
+   - Detailed streak visualization with milestone celebrations
+   - Performance optimization for loading times (NFR1.5)
+   - Sharing capabilities for accountability
+   - Light/dark mode theming (NFR4.4)
+
+## Premium Features Layer
+9. **Discipline Level System:**
+   - Implementation of all difficulty tiers
+   - Customization options
+
+# Risks and Mitigations
+
+## Technical Challenges
+- **Risk:** Google Cloud Vision API accuracy in poor lighting conditions or with unusual Bible formats
+  - **Mitigation:** Implement adaptive brightness suggestion, clear scanning guidance, and manual fallback option after 3 failed attempts (FR1.7); conduct testing with various Bible formats
+
+- **Risk:** Battery drain from background app monitoring (NFR7.3)
+  - **Mitigation:** Optimize background processes, implement selective app monitoring instead of constant background checks, provide battery impact transparency to users
+
+- **Risk:** OS-level restrictions on app blocking capabilities
+  - **Mitigation:** Research platform-specific API approaches for both iOS and Android, develop notifications-based deterrence as a fallback, ensure thorough testing on both platforms (NFR4.1-4.2)
+
+- **Risk:** User data synchronization issues across devices (NFR2.4)
+  - **Mitigation:** Implement proper conflict resolution algorithms, use Clerk's authentication system for reliable user identification, design robust offline functionality
+
+## MVP Definition Challenges
+- **Risk:** Feature creep extending development timeline
+  - **Mitigation:** Strictly prioritize core functionality (Bible verification, app blocking, basic authentication), leverage third-party solutions (Google Cloud Vision, Clerk) to reduce development effort, create clear acceptance criteria for MVP features
+
+- **Risk:** MVP might lack sufficient value proposition
+  - **Mitigation:** Focus on perfecting the core verification experience with Google Cloud Vision API (95% accuracy), ensure reliability of app blocking (98% reliability), and prioritize excellent user feedback in verification process
+
+- **Risk:** User experience complexity overwhelming new users
+  - **Mitigation:** Simplify initial experience, implement progressive disclosure of features, create excellent onboarding with clear guidance, follow NativewindUI design patterns for consistency (NFR6.3)
+
+- **Risk:** Third-party API reliability and cost concerns (Google Cloud Vision, Clerk)
+  - **Mitigation:** Implement proper error handling (NFR2.2), develop offline fallback mechanisms, calculate usage projections and budget accordingly, consider volume pricing plans
+
+## Resource Constraints
+- **Risk:** Computer vision development expertise requirements
+  - **Mitigation:** Completely eliminate custom AI development by leveraging Google Cloud Vision API, which provides pre-trained OCR capabilities with high accuracy
+
+- **Risk:** Cross-platform development resource limitations
+  - **Mitigation:** Use Expo React Native framework (TC1) to maximize code sharing between platforms, focus on iOS first but maintain Android compatibility through Expo's cross-platform approach
+
+- **Risk:** Quality assurance across diverse device ecosystem
+  - **Mitigation:** Implement TypeScript (TC2) for better error prevention, achieve minimum 70% test coverage (NFR6.4), use Expo's testing tools, prioritize critical user paths for QA, conduct beta testing with church partners
+
+- **Risk:** UI development complexity and consistency challenges
+  - **Mitigation:** Adopt NativewindUI (TC3) to accelerate UI development with consistent styling and components, reducing custom UI development work
+
+# Appendix
+
+## Technical Specifications
+
+### Bible Text Recognition System
+- Google Cloud Vision API integration for OCR capabilities (TC6)
+- 95% minimum accuracy rate in normal lighting conditions (NFR2.1)
+- Processing time under 5 seconds from camera activation to verification result (NFR1.2)
+- Text hashing for verification with zero content storage to ensure privacy (NFR3.4, NFR3.6)
+- Fallback manual entry option after 3 failed scan attempts (FR1.7)
+
+### Technical Stack & Device Requirements
+- Expo React Native framework for cross-platform development (TC1)
+- TypeScript implementation for type safety and maintainability (TC2, NFR6.1)
+- NativewindUI for consistent styling and UI components (TC3, NFR6.3)
+- React Router for navigation (TC4, NFR5.1)
+- Clerk for authentication (TC5, NFR3.1)
+- iOS 15.0+ and Android 10+ compatibility (NFR4.1)
+- Camera with autofocus capability
+- Background process support for app blocking
+- App binary size under 30MB (NFR7.4)
+- Memory usage under 200MB (NFR7.5)
+- Minimal battery usage (NFR7.3)
+
+### Design Implementation Guidelines
+The design philosophy throughout all aspects of Bible Connect focuses on reducing friction between the user and Scripture engagement, prioritizing simplicity and clarity while maintaining a respectful approach to technology usage and spiritual discipline. This approach is implemented through a pragmatic engineering strategy that leverages established third-party solutions (Google Cloud Vision, Clerk, NativewindUI, React Router) to reduce technical dependencies, accelerate development, and ensure reliability.
+</PRD>

@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "generatedAt": "2025-04-07T02:48:40.258Z",
+    "tasksAnalyzed": 10,
+    "thresholdScore": 5,
+    "projectName": "Your Project Name",
+    "usedResearch": false
+  },
+  "complexityAnalysis": [
+    {
+      "taskId": 1,
+      "taskTitle": "Setup Project Foundation with Expo and TypeScript",
+      "complexityScore": 5,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Break down the Expo React Native project setup into specific subtasks covering: project initialization with TypeScript, dependency installation, folder structure setup, and configuration of development tools.",
+      "reasoning": "This task involves standard project setup steps but requires careful configuration of TypeScript, multiple dependencies, and proper project structure. The complexity is moderate as it involves technical setup but follows established patterns."
+    },
+    {
+      "taskId": 2,
+      "taskTitle": "Implement Firebase Authentication and Data Management",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the Firebase integration into subtasks covering: Firebase SDK setup, authentication screens development, context API implementation, Firestore data model design, and error handling system.",
+      "reasoning": "This task involves multiple complex systems: Firebase configuration, authentication flows, state management with Context API, and Firestore integration. The data modeling and error handling add significant complexity requiring careful planning."
+    },
+    {
+      "taskId": 3,
+      "taskTitle": "Develop Camera Integration with Google Cloud Vision API",
+      "complexityScore": 8,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the camera and OCR implementation into subtasks covering: camera module integration, permissions handling, Google Cloud Vision API setup, text recognition optimization, and fallback mechanism development.",
+      "reasoning": "This task combines hardware access (camera), external API integration, complex text recognition algorithms, and error handling. The performance requirements (5-second verification) and fallback mechanisms add significant complexity."
+    },
+    {
+      "taskId": 4,
+      "taskTitle": "Create App Blocking Mechanism",
+      "complexityScore": 9,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the app blocking functionality into subtasks covering: platform-specific API research, app selection interface, blocking mechanism implementation, daily reset functionality, and emergency override system.",
+      "reasoning": "This is highly complex as it requires platform-specific APIs that may have limitations, creating a reliable blocking system (98% reliability), and handling various edge cases including emergency overrides. The core functionality of the app depends on this task."
+    },
+    {
+      "taskId": 5,
+      "taskTitle": "Implement Essential Notification System",
+      "complexityScore": 6,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Break down the notification system into subtasks covering: notification API integration, scheduling system, user preference management, and cross-device synchronization.",
+      "reasoning": "The notification system involves multiple types of notifications, scheduling, user preferences, and platform-specific permission handling. The synchronization with Firestore adds complexity, but the task follows established patterns for mobile notifications."
+    },
+    {
+      "taskId": 6,
+      "taskTitle": "Develop User Interface and Onboarding Experience",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the UI development into subtasks covering: core component library creation, onboarding flow, main dashboard implementation, settings screens, and theme system with accessibility features.",
+      "reasoning": "This task covers a wide range of UI components across multiple screens with complex interactions. The accessibility requirements, animations, and theme support add significant complexity requiring careful planning and implementation."
+    },
+    {
+      "taskId": 7,
+      "taskTitle": "Create Streak Tracking and Dashboard",
+      "complexityScore": 6,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Break down the streak tracking system into subtasks covering: streak data model design, visualization components, milestone recognition system, and analytics implementation.",
+      "reasoning": "The streak tracking involves complex data modeling with Firestore, real-time updates, visualization components, and analytics. The timezone handling and milestone recognition add complexity, but the scope is well-defined."
+    },
+    {
+      "taskId": 8,
+      "taskTitle": "Implement Discipline Level System",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down the discipline level system into subtasks covering: level data model implementation, verification logic for different levels, and user interface for level selection and guidance.",
+      "reasoning": "This task builds on existing verification functionality with moderate complexity. The main challenges are implementing different verification requirements for each level and creating a clear UI for level selection and explanation."
+    },
+    {
+      "taskId": 9,
+      "taskTitle": "Optimize Performance and Battery Usage",
+      "complexityScore": 8,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the optimization process into subtasks covering: camera verification optimization, background process efficiency, memory usage reduction, app size optimization, and offline functionality implementation.",
+      "reasoning": "Performance optimization is inherently complex, requiring deep technical knowledge across multiple systems. The specific requirements (5-second verification, under 200MB memory, 30MB app size) add significant complexity and require careful measurement and optimization."
+    },
+    {
+      "taskId": 10,
+      "taskTitle": "Implement Testing and Quality Assurance",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the testing implementation into subtasks covering: test framework setup, unit test development, integration test creation, E2E testing, and cross-device testing procedures.",
+      "reasoning": "Comprehensive testing across multiple test types (unit, integration, E2E) with a coverage target of 70% is complex. The need to test on various devices and platforms adds significant complexity, especially for features like camera and app blocking."
+    }
+  ]
+}
