@@ -33,26 +33,26 @@ A React Native application that helps users build a daily Bible reading habit by
 ## Getting Started
 
 1. Clone the repository:
-\`\`\`bash
-git clone [repository-url]
-cd touch-your-bible
-\`\`\`
+```bash
+git clone https://github.com/DamonRedding/touch-your-bible-project.git
+cd touch-your-bible-project
+```
 
 2. Install dependencies:
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 3. Start the development server:
-\`\`\`bash
+```bash
 npm start
-\`\`\`
+```
 
 4. Run on your preferred platform:
-\`\`\`bash
+```bash
 npm run ios     # for iOS
 npm run android # for Android
-\`\`\`
+```
 
 ## Development
 
