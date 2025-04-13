@@ -3,6 +3,7 @@ import { User, signInWithEmailAndPassword, createUserWithEmailAndPassword, signO
 import { auth } from '../config/firebase';
 import { router } from 'expo-router';
 import { Platform } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 
 interface AuthContextType {
   user: User | null;
@@ -13,14 +14,39 @@ interface AuthContextType {
   resetPassword: (email: string) => Promise<void>;
   signInAnonymously: () => Promise<void>;
   isAnonymous: boolean;
+  profile: any | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}
+
+export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (!user) {
+    return fallback || null;
+  }
+
+  return <>{children}</>;
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const [profile, setProfile] = useState<any | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
@@ -136,7 +162,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signOut,
         resetPassword,
         signInAnonymously,
-        isAnonymous
+        isAnonymous,
+        profile
       }}
     >
       {children}

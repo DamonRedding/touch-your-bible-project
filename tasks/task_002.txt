@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Implement Firebase Authentication and Data Management
-# Status: in-progress
+# Status: done
 # Dependencies: 1
 # Priority: high
 # Description: Integrate Firebase for user authentication, profile management, and secure data storage
@@ -11,7 +11,7 @@ Set up Firebase SDK in the Expo project. Create authentication screens (sign up,
 Test complete authentication flow from signup to login to logout. Verify data persistence and real-time updates using Firestore. Test error scenarios like invalid credentials or network failures. Ensure proper type safety with TypeScript interfaces. Manually verify profile information updates correctly.
 
 # Subtasks:
-## 1. Set up Firebase SDK and implement authentication screens [in-progress]
+## 1. Set up Firebase SDK and implement authentication screens [done]
 ### Dependencies: None
 ### Description: Install and configure the Firebase SDK in the Expo project and create the necessary authentication screens for user sign up, login, and password reset.
 ### Details:
@@ -26,7 +26,7 @@ Test complete authentication flow from signup to login to logout. Verify data pe
 9. Test each screen's functionality manually.
 10. Ensure proper validation and error messages appear for invalid inputs.
 
-## 2. Create authentication context and Firestore integration [pending]
+## 2. Create authentication context and Firestore integration [done]
 ### Dependencies: 2.1
 ### Description: Implement a React Context API for managing authentication state throughout the app and integrate Firestore for data persistence.
 ### Details:
@@ -41,7 +41,7 @@ Test complete authentication flow from signup to login to logout. Verify data pe
 9. Test the context by implementing a protected route that requires authentication.
 10. Verify that auth state and data persist across app restarts.
 
-## 3. Implement profile management functionality [pending]
+## 3. Implement profile management functionality [done]
 ### Dependencies: 2.1, 2.2
 ### Description: Create a profile settings screen that allows users to view and update their profile information, and implement proper error handling for all authentication-related operations.
 ### Details:

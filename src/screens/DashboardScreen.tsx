@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useAuth } from '../contexts/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
 export default function DashboardScreen() {
   const { user, profile, signOut, isLoading } = useAuth();
@@ -28,13 +29,17 @@ export default function DashboardScreen() {
       <View className="flex-1 p-4">
         <View className="bg-white rounded-lg p-4 shadow-sm">
           <Text className="text-2xl font-bold mb-4">Welcome!</Text>
-          {profile?.displayName && (
-            <Text className="text-lg mb-2">Name: {profile.displayName}</Text>
-          )}
           {user?.email && (
             <Text className="text-lg mb-4">Email: {user.email}</Text>
           )}
         </View>
+
+        <TouchableOpacity
+          className="bg-blue-500 p-4 rounded-lg mt-4"
+          onPress={() => router.push('/camera')}
+        >
+          <Text className="text-white text-center font-semibold">Verify Bible Text</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity
           className="bg-red-500 p-4 rounded-lg mt-4"

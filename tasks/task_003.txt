@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Develop Camera Integration with Google Cloud Vision API
-# Status: pending
+# Status: in-progress
 # Dependencies: 1
 # Priority: high
 # Description: Implement camera functionality and integrate with Google Cloud Vision API for Bible text recognition
