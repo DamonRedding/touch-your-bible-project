@@ -60,7 +60,7 @@
       "id": 3,
       "title": "Develop Camera Integration with Google Cloud Vision API",
       "description": "Implement camera functionality and integrate with Google Cloud Vision API for Bible text recognition",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         1
       ],
@@ -74,7 +74,7 @@
           "description": "Implement the camera access functionality using Expo Camera module and handle all necessary permissions",
           "dependencies": [],
           "details": "Implementation steps:\n1. Install Expo Camera module and dependencies: `expo install expo-camera`\n2. Create a CameraView component that wraps the Expo Camera component\n3. Implement permission request logic for camera access using `expo-permissions`\n4. Add UI elements for permission states (requesting, denied, granted)\n5. Create intuitive UI guidance for users on how to position the Bible text\n6. Implement camera controls (flash toggle, capture button)\n7. Add visual guides/frame to help users position Bible text correctly\n\nTesting approach:\n- Test permission flows on both iOS and Android\n- Verify camera preview displays correctly\n- Test edge cases like permission denial and re-requesting permissions",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {
@@ -85,7 +85,7 @@
             1
           ],
           "details": "Implementation steps:\n1. Create a Google Cloud project and enable the Vision API\n2. Generate and securely store API credentials\n3. Implement a secure API client service using environment variables for keys\n4. Create a wrapper function for making OCR requests to the Vision API\n5. Implement image preprocessing to optimize for text recognition (resizing, compression)\n6. Add proper error handling for API failures and rate limiting\n7. Create a test harness to verify API connectivity and response parsing\n\nTesting approach:\n- Test API connectivity with sample Bible text images\n- Verify proper error handling with invalid credentials\n- Measure and optimize request/response times\n- Ensure secure credential handling",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {
@@ -96,7 +96,7 @@
             2
           ],
           "details": "Implementation steps:\n1. Create pattern recognition functions to identify Bible text formats (book, chapter, verse)\n2. Implement text cleaning and normalization for OCR results\n3. Develop regex patterns to extract Bible references from recognized text\n4. Create a verification function that confirms text matches Bible format\n5. Implement a hashing mechanism for privacy-preserving text verification\n6. Add logging for recognition accuracy metrics\n7. Optimize text extraction for speed and accuracy\n\nTesting approach:\n- Test with various Bible formats and translations\n- Verify recognition of different verse notation styles\n- Test edge cases like partial text visibility\n- Benchmark recognition accuracy against a test dataset",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {
@@ -108,7 +108,7 @@
             3
           ],
           "details": "Implementation steps:\n1. Design and implement loading indicators during API processing\n2. Create visual success/failure feedback animations\n3. Implement error detection for common issues (poor lighting, blurry text, etc.)\n4. Add specific guidance messages for different error types\n5. Implement retry logic with helpful tips for improving scan quality\n6. Create a counter for failed attempts\n7. Add analytics tracking for success/failure rates\n8. Optimize the UI to provide feedback within 5 seconds of scanning\n\nTesting approach:\n- Test feedback under various lighting conditions\n- Verify error messages are clear and actionable\n- Time the complete feedback cycle to ensure it meets performance requirements\n- Test with users to ensure guidance is helpful",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {
@@ -119,7 +119,7 @@
             4
           ],
           "details": "Implementation steps:\n1. Implement a counter to track failed scanning attempts\n2. Create a trigger to show manual entry after 3 failed attempts\n3. Design and implement a user-friendly manual entry form\n4. Add validation for manually entered Bible references\n5. Implement auto-suggestions for book names during manual entry\n6. Create smooth transitions between scanning and manual modes\n7. Preserve user input across mode switches\n8. Add analytics to track fallback usage\n\nTesting approach:\n- Verify fallback triggers correctly after 3 failures\n- Test manual entry validation logic\n- Test auto-suggestions accuracy\n- Ensure entered data is processed the same way as scanned data",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         }
       ]
@@ -128,14 +128,71 @@
       "id": 4,
       "title": "Create App Blocking Mechanism",
       "description": "Develop the core app blocking functionality that restricts access to selected applications until Bible verification",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2,
         3
       ],
       "priority": "high",
       "details": "Research and implement platform-specific APIs for app blocking on iOS and Android. Create app selection interface with search functionality and categorization. Implement data model for storing user-selected blocked apps in Firestore. Develop blocking mechanism with 98% reliability that prevents access to selected apps until verification. Create daily reset functionality (default at 4AM, but configurable). Implement beginner discipline level logic that requires single Bible page scan. Add emergency override option for critical situations. Ensure blocking mechanism is battery-efficient by optimizing background processes.",
-      "testStrategy": "Test app blocking functionality on both iOS and Android with various apps. Verify reliability by attempting to access blocked apps in different scenarios. Test daily reset functionality by changing device time. Measure battery impact during extended use. Test emergency override functionality. Verify app selection interface works correctly with different app categories."
+      "testStrategy": "Test app blocking functionality on both iOS and Android with various apps. Verify reliability by attempting to access blocked apps in different scenarios. Test daily reset functionality by changing device time. Measure battery impact during extended use. Test emergency override functionality. Verify app selection interface works correctly with different app categories.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Research and Implement Platform-Specific App Detection APIs",
+          "description": "Research and implement the necessary APIs to detect installed applications on both iOS and Android platforms, creating a unified interface for the rest of the app to use.",
+          "dependencies": [],
+          "details": "Implementation steps:\n1. Research iOS application detection capabilities using ApplicationStateService\n2. Research Android package detection using PackageManager\n3. Create platform-specific service classes (iOSAppDetectionService and AndroidAppDetectionService)\n4. Implement a common interface (AppDetectionService) that both platform services implement\n5. Add methods to retrieve all installed apps with their metadata (name, package ID, icon)\n6. Create unit tests for each platform implementation\n7. Test on various device models to ensure compatibility\n\nTesting approach:\n- Create mock implementations for unit testing\n- Manual testing on physical devices to verify app detection accuracy\n- Performance testing to ensure efficient app scanning",
+          "status": "in-progress",
+          "parentTaskId": 4
+        },
+        {
+          "id": 2,
+          "title": "Develop App Selection Interface with Search and Categories",
+          "description": "Create a user interface that allows users to browse, search, and select applications they want to block, with proper categorization and visual feedback.",
+          "dependencies": [
+            1
+          ],
+          "details": "Implementation steps:\n1. Design UI mockups for app selection screen with search bar, category filters, and selection indicators\n2. Implement the app list view with app icons, names, and selection checkboxes\n3. Add search functionality that filters apps by name in real-time\n4. Implement category-based filtering (social media, games, productivity, etc.)\n5. Create a selected apps summary view that shows currently blocked apps\n6. Add animations for selection/deselection of apps\n7. Implement data binding to Firestore model\n\nTesting approach:\n- UI tests for search functionality\n- User testing for intuitiveness of selection process\n- Performance testing with large app lists\n- Test edge cases like no search results or empty app categories",
+          "status": "pending",
+          "parentTaskId": 4
+        },
+        {
+          "id": 3,
+          "title": "Implement Core App Blocking Mechanism",
+          "description": "Develop the actual blocking functionality that prevents users from accessing selected applications until Bible verification is completed.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Implementation steps:\n1. Research platform-specific app blocking techniques (iOS: AppDelegate interception, Android: AccessibilityService)\n2. Create BlockingService interface with platform-specific implementations\n3. Implement iOS blocking mechanism using app switching detection\n4. Implement Android blocking using accessibility services or usage stats API\n5. Create an overlay that appears when user attempts to access blocked app\n6. Implement verification status checking to determine if blocking should be active\n7. Optimize for minimal battery usage with efficient background processing\n8. Implement reliability metrics to ensure 98% blocking success rate\n\nTesting approach:\n- Automated tests for blocking logic\n- Manual testing on various device models\n- Battery consumption testing in different scenarios\n- Stress testing with rapid app switching\n- Reliability testing across different system conditions",
+          "status": "pending",
+          "parentTaskId": 4
+        },
+        {
+          "id": 4,
+          "title": "Create Daily Reset and Discipline Level Logic",
+          "description": "Implement the functionality to reset blocking status daily at a configurable time and handle discipline levels that determine verification requirements.",
+          "dependencies": [
+            3
+          ],
+          "details": "Implementation steps:\n1. Implement daily reset scheduler with configurable time (default 4AM)\n2. Create user interface for configuring reset time\n3. Develop discipline level model with beginner level logic (single Bible page scan)\n4. Implement verification requirement rules based on discipline level\n5. Create notification system to alert users about upcoming and completed resets\n6. Implement data persistence for reset configuration in Firestore\n7. Add background task to handle reset even when app is not active\n\nTesting approach:\n- Unit tests for reset logic and discipline level calculations\n- Time-based testing with mocked system time\n- Integration tests with the blocking mechanism\n- Background execution testing\n- Notification delivery testing",
+          "status": "pending",
+          "parentTaskId": 4
+        },
+        {
+          "id": 5,
+          "title": "Implement Emergency Override System",
+          "description": "Create a mechanism that allows users to temporarily override app blocking in critical situations, with appropriate safeguards.",
+          "dependencies": [
+            3,
+            4
+          ],
+          "details": "Implementation steps:\n1. Design emergency override UI with confirmation dialog\n2. Implement override duration options (15 min, 30 min, 1 hour)\n3. Create override tracking system to prevent abuse\n4. Add logging of override usage to Firestore\n5. Implement cooldown period between overrides\n6. Create admin configuration options for override limits\n7. Add visual indicators when apps are in override mode\n8. Implement automatic reactivation of blocking after override period ends\n\nTesting approach:\n- Unit tests for override logic and duration calculations\n- User testing for emergency scenario simulation\n- Edge case testing for override limits and cooldown periods\n- Integration testing with blocking mechanism\n- Verification that blocking reactivates correctly after override expires",
+          "status": "pending",
+          "parentTaskId": 4
+        }
+      ]
     },
     {
       "id": 5,

@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Create App Blocking Mechanism
-# Status: pending
+# Status: in-progress
 # Dependencies: 2, 3
 # Priority: high
 # Description: Develop the core app blocking functionality that restricts access to selected applications until Bible verification
@@ -9,3 +9,104 @@ Research and implement platform-specific APIs for app blocking on iOS and Androi
 
 # Test Strategy:
 Test app blocking functionality on both iOS and Android with various apps. Verify reliability by attempting to access blocked apps in different scenarios. Test daily reset functionality by changing device time. Measure battery impact during extended use. Test emergency override functionality. Verify app selection interface works correctly with different app categories.
+
+# Subtasks:
+## 1. Research and Implement Platform-Specific App Detection APIs [in-progress]
+### Dependencies: None
+### Description: Research and implement the necessary APIs to detect installed applications on both iOS and Android platforms, creating a unified interface for the rest of the app to use.
+### Details:
+Implementation steps:
+1. Research iOS application detection capabilities using ApplicationStateService
+2. Research Android package detection using PackageManager
+3. Create platform-specific service classes (iOSAppDetectionService and AndroidAppDetectionService)
+4. Implement a common interface (AppDetectionService) that both platform services implement
+5. Add methods to retrieve all installed apps with their metadata (name, package ID, icon)
+6. Create unit tests for each platform implementation
+7. Test on various device models to ensure compatibility
+
+Testing approach:
+- Create mock implementations for unit testing
+- Manual testing on physical devices to verify app detection accuracy
+- Performance testing to ensure efficient app scanning
+
+## 2. Develop App Selection Interface with Search and Categories [pending]
+### Dependencies: 4.1
+### Description: Create a user interface that allows users to browse, search, and select applications they want to block, with proper categorization and visual feedback.
+### Details:
+Implementation steps:
+1. Design UI mockups for app selection screen with search bar, category filters, and selection indicators
+2. Implement the app list view with app icons, names, and selection checkboxes
+3. Add search functionality that filters apps by name in real-time
+4. Implement category-based filtering (social media, games, productivity, etc.)
+5. Create a selected apps summary view that shows currently blocked apps
+6. Add animations for selection/deselection of apps
+7. Implement data binding to Firestore model
+
+Testing approach:
+- UI tests for search functionality
+- User testing for intuitiveness of selection process
+- Performance testing with large app lists
+- Test edge cases like no search results or empty app categories
+
+## 3. Implement Core App Blocking Mechanism [pending]
+### Dependencies: 4.1, 4.2
+### Description: Develop the actual blocking functionality that prevents users from accessing selected applications until Bible verification is completed.
+### Details:
+Implementation steps:
+1. Research platform-specific app blocking techniques (iOS: AppDelegate interception, Android: AccessibilityService)
+2. Create BlockingService interface with platform-specific implementations
+3. Implement iOS blocking mechanism using app switching detection
+4. Implement Android blocking using accessibility services or usage stats API
+5. Create an overlay that appears when user attempts to access blocked app
+6. Implement verification status checking to determine if blocking should be active
+7. Optimize for minimal battery usage with efficient background processing
+8. Implement reliability metrics to ensure 98% blocking success rate
+
+Testing approach:
+- Automated tests for blocking logic
+- Manual testing on various device models
+- Battery consumption testing in different scenarios
+- Stress testing with rapid app switching
+- Reliability testing across different system conditions
+
+## 4. Create Daily Reset and Discipline Level Logic [pending]
+### Dependencies: 4.3
+### Description: Implement the functionality to reset blocking status daily at a configurable time and handle discipline levels that determine verification requirements.
+### Details:
+Implementation steps:
+1. Implement daily reset scheduler with configurable time (default 4AM)
+2. Create user interface for configuring reset time
+3. Develop discipline level model with beginner level logic (single Bible page scan)
+4. Implement verification requirement rules based on discipline level
+5. Create notification system to alert users about upcoming and completed resets
+6. Implement data persistence for reset configuration in Firestore
+7. Add background task to handle reset even when app is not active
+
+Testing approach:
+- Unit tests for reset logic and discipline level calculations
+- Time-based testing with mocked system time
+- Integration tests with the blocking mechanism
+- Background execution testing
+- Notification delivery testing
+
+## 5. Implement Emergency Override System [pending]
+### Dependencies: 4.3, 4.4
+### Description: Create a mechanism that allows users to temporarily override app blocking in critical situations, with appropriate safeguards.
+### Details:
+Implementation steps:
+1. Design emergency override UI with confirmation dialog
+2. Implement override duration options (15 min, 30 min, 1 hour)
+3. Create override tracking system to prevent abuse
+4. Add logging of override usage to Firestore
+5. Implement cooldown period between overrides
+6. Create admin configuration options for override limits
+7. Add visual indicators when apps are in override mode
+8. Implement automatic reactivation of blocking after override period ends
+
+Testing approach:
+- Unit tests for override logic and duration calculations
+- User testing for emergency scenario simulation
+- Edge case testing for override limits and cooldown periods
+- Integration testing with blocking mechanism
+- Verification that blocking reactivates correctly after override expires
+
