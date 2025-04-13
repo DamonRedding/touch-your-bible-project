@@ -38,6 +38,7 @@
     },
     "plugins": [
       "expo-splash-screen"
-    ]
+    ],
+    "sdkVersion": "51.0.0"
   }
 }

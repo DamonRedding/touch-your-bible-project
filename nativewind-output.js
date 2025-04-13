@@ -243,6 +243,9 @@ _NativeWindStyleSheet.create({
     "[hidden]": {
       "display": "none"
     },
+    "h-[1px]": {
+      "height": 1
+    },
     "flex-1": {
       "flexGrow": 1,
       "flexShrink": 1,
@@ -256,6 +259,15 @@ _NativeWindStyleSheet.create({
     },
     "justify-center": {
       "justifyContent": "center"
+    },
+    "justify-around": {
+      "justifyContent": "space-around"
+    },
+    "rounded-full": {
+      "borderTopLeftRadius": 9999,
+      "borderTopRightRadius": 9999,
+      "borderBottomRightRadius": 9999,
+      "borderBottomLeftRadius": 9999
     },
     "rounded-lg": {
       "borderTopLeftRadius": "0.5rem",
@@ -278,11 +290,23 @@ _NativeWindStyleSheet.create({
     "bg-blue-500": {
       "backgroundColor": "rgba(59, 130, 246, 1)"
     },
+    "bg-gray-100": {
+      "backgroundColor": "rgba(243, 244, 246, 1)"
+    },
+    "bg-gray-300": {
+      "backgroundColor": "rgba(209, 213, 219, 1)"
+    },
     "bg-red-500": {
       "backgroundColor": "rgba(239, 68, 68, 1)"
     },
+    "bg-transparent": {
+      "backgroundColor": "transparent"
+    },
     "bg-white": {
       "backgroundColor": "rgba(255, 255, 255, 1)"
+    },
+    "bg-white/20": {
+      "backgroundColor": "rgba(255, 255, 255, 0.2)"
     },
     "text-center": {
       "textAlign": "center"
@@ -291,6 +315,10 @@ _NativeWindStyleSheet.create({
       "fontSize": "1.5rem",
       "lineHeight": "2rem"
     },
+    "text-base": {
+      "fontSize": "1rem",
+      "lineHeight": "1.5rem"
+    },
     "text-lg": {
       "fontSize": "1.125rem",
       "lineHeight": "1.75rem"
@@ -298,14 +326,23 @@ _NativeWindStyleSheet.create({
     "font-bold": {
       "fontWeight": "700"
     },
+    "font-medium": {
+      "fontWeight": "500"
+    },
     "font-semibold": {
       "fontWeight": "600"
     },
     "text-blue-500": {
       "color": "rgba(59, 130, 246, 1)"
     },
+    "text-gray-500": {
+      "color": "rgba(107, 114, 128, 1)"
+    },
     "text-gray-600": {
       "color": "rgba(75, 85, 99, 1)"
+    },
+    "text-gray-700": {
+      "color": "rgba(55, 65, 81, 1)"
     },
     "text-white": {
       "color": "rgba(255, 255, 255, 1)"
