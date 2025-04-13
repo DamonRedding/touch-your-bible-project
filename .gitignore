@@ -61,3 +61,10 @@ expo-env.d.ts
 
 # Task management
 tasks.backup/
+
+# Google Cloud
+google-cloud-vision-api/
+src/config/google-cloud-credentials.ts
+
+# Google Cloud Service Account Credentials
+google-cloud-vision-api/*.json
