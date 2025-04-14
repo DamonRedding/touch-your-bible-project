@@ -143,7 +143,7 @@
           "description": "Research and implement the necessary APIs to detect installed applications on both iOS and Android platforms, creating a unified interface for the rest of the app to use.",
           "dependencies": [],
           "details": "Implementation steps:\n1. Research iOS application detection capabilities using ApplicationStateService\n2. Research Android package detection using PackageManager\n3. Create platform-specific service classes (iOSAppDetectionService and AndroidAppDetectionService)\n4. Implement a common interface (AppDetectionService) that both platform services implement\n5. Add methods to retrieve all installed apps with their metadata (name, package ID, icon)\n6. Create unit tests for each platform implementation\n7. Test on various device models to ensure compatibility\n\nTesting approach:\n- Create mock implementations for unit testing\n- Manual testing on physical devices to verify app detection accuracy\n- Performance testing to ensure efficient app scanning",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -154,7 +154,7 @@
             1
           ],
           "details": "Implementation steps:\n1. Design UI mockups for app selection screen with search bar, category filters, and selection indicators\n2. Implement the app list view with app icons, names, and selection checkboxes\n3. Add search functionality that filters apps by name in real-time\n4. Implement category-based filtering (social media, games, productivity, etc.)\n5. Create a selected apps summary view that shows currently blocked apps\n6. Add animations for selection/deselection of apps\n7. Implement data binding to Firestore model\n\nTesting approach:\n- UI tests for search functionality\n- User testing for intuitiveness of selection process\n- Performance testing with large app lists\n- Test edge cases like no search results or empty app categories",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 4
         },
         {

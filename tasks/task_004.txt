@@ -11,7 +11,7 @@ Research and implement platform-specific APIs for app blocking on iOS and Androi
 Test app blocking functionality on both iOS and Android with various apps. Verify reliability by attempting to access blocked apps in different scenarios. Test daily reset functionality by changing device time. Measure battery impact during extended use. Test emergency override functionality. Verify app selection interface works correctly with different app categories.
 
 # Subtasks:
-## 1. Research and Implement Platform-Specific App Detection APIs [in-progress]
+## 1. Research and Implement Platform-Specific App Detection APIs [done]
 ### Dependencies: None
 ### Description: Research and implement the necessary APIs to detect installed applications on both iOS and Android platforms, creating a unified interface for the rest of the app to use.
 ### Details:
@@ -29,7 +29,7 @@ Testing approach:
 - Manual testing on physical devices to verify app detection accuracy
 - Performance testing to ensure efficient app scanning
 
-## 2. Develop App Selection Interface with Search and Categories [pending]
+## 2. Develop App Selection Interface with Search and Categories [in-progress]
 ### Dependencies: 4.1
 ### Description: Create a user interface that allows users to browse, search, and select applications they want to block, with proper categorization and visual feedback.
 ### Details:
