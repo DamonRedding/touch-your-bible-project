@@ -1,38 +1,31 @@
 {
   "indexes": [
     {
-      "collectionGroup": "users",
+      "collectionGroup": "verifications",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "points", "order": "DESCENDING" },
-        { "fieldPath": "currentStreak", "order": "DESCENDING" },
-        { "fieldPath": "createdAt", "order": "ASCENDING" }
+        {
+          "fieldPath": "userId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "timestamp",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
-      "collectionGroup": "users",
+      "collectionGroup": "verifications",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "currentStreak", "order": "DESCENDING" },
-        { "fieldPath": "points", "order": "DESCENDING" },
-        { "fieldPath": "createdAt", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "friends",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "points", "order": "DESCENDING" },
-        { "fieldPath": "currentStreak", "order": "DESCENDING" },
-        { "fieldPath": "connectedAt", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "invites",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "isActive", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
+        {
+          "fieldPath": "userId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "timestamp",
+          "order": "ASCENDING"
+        }
       ]
     }
   ],

@@ -92,6 +92,27 @@ service cloud.firestore {
     }
 
     // ============================================
+    // VERIFICATIONS COLLECTION (Top-level for Day 3)
+    // ============================================
+
+    match /verifications/{verificationId} {
+      // Read: Only owner can read their verifications
+      allow read: if isSignedIn()
+        && request.auth.uid == resource.data.userId;
+
+      // Create: Only owner can create verifications
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.timestamp != null
+        && request.resource.data.userTimezone != null
+        && request.resource.data.verifiedDate != null;
+
+      // Update/Delete: Not allowed (immutable verification logs)
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // ============================================
     // INVITES COLLECTION
     // ============================================
 

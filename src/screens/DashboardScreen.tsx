@@ -1,29 +1,64 @@
-// Dashboard Screen - Rebuilt for Day 2
+// Dashboard Screen - Day 3 with Firestore Integration
 // Owner: Alex (Lead Engineer)
 // Design: Taylor (Visual Designer)
-// Created: October 7, 2025
+// Created: October 7, 2025 | Updated: October 8, 2025
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Pressable, ActivityIndicator, ScrollView } from 'react-native';
 import { useAuth } from '../contexts/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { VerifyModal } from '../components/VerifyModal';
-
-// Day 2: Stub data (will be replaced with Firestore data Day 3+)
-const STUB_USER_DATA = {
-  currentStreak: 0,
-  longestStreak: 0,
-  totalVerifications: 0,
-  points: 0,
-  rank: null,
-};
+import { Confetti } from '../components/Confetti';
+import {
+  calculateCurrentStreak,
+  calculateLongestStreak,
+  getTotalVerifications,
+} from '../services/verification';
 
 export default function DashboardScreen() {
   const { user, profile, signOut, isLoading } = useAuth();
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [userData, setUserData] = useState({
+    currentStreak: 0,
+    longestStreak: 0,
+    totalVerifications: 0,
+    points: 0,
+    rank: null as number | null,
+  });
 
-  // Day 2: Using stub data
-  const userData = STUB_USER_DATA;
+  // Load user data from Firestore
+  const loadUserData = async () => {
+    if (!user) return;
+
+    setIsLoadingData(true);
+    try {
+      const [currentStreak, longestStreak, totalVerifications] = await Promise.all([
+        calculateCurrentStreak(user.uid),
+        calculateLongestStreak(user.uid),
+        getTotalVerifications(user.uid),
+      ]);
+
+      setUserData({
+        currentStreak,
+        longestStreak,
+        totalVerifications,
+        points: totalVerifications * 10, // 10 points per verification
+        rank: null, // Leaderboard integration later
+      });
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      // Keep previous data on error
+    } finally {
+      setIsLoadingData(false);
+    }
+  };
+
+  // Load data on mount and when user changes
+  useEffect(() => {
+    loadUserData();
+  }, [user]);
 
   // Get time-based greeting
   const getGreeting = () => {
@@ -37,13 +72,20 @@ export default function DashboardScreen() {
     setIsVerifyModalOpen(true);
   };
 
-  const handleVerify = () => {
-    // Day 2: Console log only
-    console.log('Verification action triggered');
-    // Day 3: Will add Firestore write + streak calculation
+  const handleVerifySuccess = () => {
+    // Trigger confetti
+    setShowConfetti(true);
+
+    // Reload data to update streaks
+    loadUserData();
+
+    // Stop confetti after 3 seconds
+    setTimeout(() => {
+      setShowConfetti(false);
+    }, 3000);
   };
 
-  if (isLoading) {
+  if (isLoading || isLoadingData) {
     return (
       <SafeAreaView className="flex-1 bg-gray-50">
         <View className="flex-1 justify-center items-center">
@@ -51,6 +93,10 @@ export default function DashboardScreen() {
         </View>
       </SafeAreaView>
     );
+  }
+
+  if (!user) {
+    return null; // Auth should redirect
   }
 
   return (
@@ -136,16 +182,19 @@ export default function DashboardScreen() {
       <VerifyModal
         isOpen={isVerifyModalOpen}
         onClose={() => setIsVerifyModalOpen(false)}
+        userId={user.uid}
         currentStreak={userData.currentStreak}
-        onVerify={handleVerify}
+        onVerifySuccess={handleVerifySuccess}
       />
+
+      {/* Confetti Animation */}
+      {showConfetti && <Confetti />}
     </SafeAreaView>
   );
 }
 
-// Day 3 will add:
-// - Replace stub data with Firestore queries
-// - Confetti animation after verification
-// - Haptic feedback
-// - Real streak calculation
-// - Points update 
+// ✅ Day 3 Complete:
+// - Firestore data loading (streaks, verifications, points)
+// - Confetti trigger on successful verification
+// - Real-time data refresh after verification
+// TODO: Add haptic feedback (next task) 
