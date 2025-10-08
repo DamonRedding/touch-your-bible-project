@@ -23,7 +23,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.touchyourbible.app",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSCameraUsageDescription": "We need camera access to verify your Bible reading by taking a photo of the text.",
+        "NSPhotoLibraryUsageDescription": "We need access to save verification photos."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -37,8 +41,22 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-splash-screen"
+      "expo-splash-screen",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "We need camera access to verify your Bible reading by taking a photo of the text."
+        }
+      ]
     ],
-    "sdkVersion": "51.0.0"
+    "extra": {
+      "router": {
+        "origin": "https://touchyourbible.app",
+        "root": "./src/app"
+      },
+      "eas": {
+        "projectId": "5fc8fb5f-1c67-431c-8f37-73109b480dd9"
+      }
+    }
   }
 }
