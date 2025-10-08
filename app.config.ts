@@ -19,8 +19,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.touchyourbible.app',
+    buildNumber: '1',
     config: {
       usesNonExemptEncryption: false
+    },
+    infoPlist: {
+      NSCameraUsageDescription: 'This app needs access to camera to scan Bible verses.',
+      NSPhotoLibraryUsageDescription: 'This app needs access to photo library to select images for Bible verse scanning.'
     }
   },
   android: {
@@ -42,6 +47,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       }
     ],
     'expo-secure-store',
+    'expo-camera',
     [
       'expo-build-properties',
       {
