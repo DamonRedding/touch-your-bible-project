@@ -1,12 +1,12 @@
 import { db } from '../config/firebase';
 import { UserProfile, UserPreferences } from '../types/user';
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { Timestamp, doc, getDoc, setDoc, updateDoc, collection, onSnapshot } from 'firebase/firestore';
 
 const USERS_COLLECTION = 'users';
 
 type FirestoreUserProfile = Omit<UserProfile, 'id' | 'createdAt' | 'lastLoginAt'> & {
-  createdAt: FirebaseFirestoreTypes.Timestamp;
-  lastLoginAt: FirebaseFirestoreTypes.Timestamp;
+  createdAt: Timestamp;
+  lastLoginAt: Timestamp;
 };
 
 export async function createUserProfile(userId: string, email: string): Promise<void> {
@@ -28,16 +28,18 @@ export async function createUserProfile(userId: string, email: string): Promise<
     disciplineLevel: 'beginner',
   };
 
-  await db.collection(USERS_COLLECTION).doc(userId).set(userProfile);
+  const userRef = doc(db, USERS_COLLECTION, userId);
+  await setDoc(userRef, userProfile);
 }
 
 export async function getUserProfile(userId: string): Promise<UserProfile | null> {
-  const doc = await db.collection(USERS_COLLECTION).doc(userId).get();
-  if (!doc.exists) return null;
-  
-  const data = doc.data() as FirestoreUserProfile;
+  const userRef = doc(db, USERS_COLLECTION, userId);
+  const docSnap = await getDoc(userRef);
+  if (!docSnap.exists()) return null;
+
+  const data = docSnap.data() as FirestoreUserProfile;
   return {
-    id: doc.id,
+    id: docSnap.id,
     ...data,
     createdAt: data.createdAt.toDate(),
     lastLoginAt: data.lastLoginAt.toDate(),
@@ -48,7 +50,8 @@ export async function updateUserProfile(
   userId: string,
   updates: Partial<Omit<UserProfile, 'id' | 'email' | 'createdAt'>>
 ): Promise<void> {
-  await db.collection(USERS_COLLECTION).doc(userId).update({
+  const userRef = doc(db, USERS_COLLECTION, userId);
+  await updateDoc(userRef, {
     ...updates,
     lastLoginAt: new Date(),
   });
@@ -58,7 +61,8 @@ export async function updateUserPreferences(
   userId: string,
   preferences: Partial<UserPreferences>
 ): Promise<void> {
-  await db.collection(USERS_COLLECTION).doc(userId).update({
+  const userRef = doc(db, USERS_COLLECTION, userId);
+  await updateDoc(userRef, {
     'preferences': preferences,
   });
 }
@@ -68,20 +72,20 @@ export function subscribeToUserProfile(
   onUpdate: (profile: UserProfile) => void,
   onError?: (error: Error) => void
 ): () => void {
-  return db.collection(USERS_COLLECTION)
-    .doc(userId)
-    .onSnapshot(
-      (doc) => {
-        if (doc.exists) {
-          const data = doc.data() as FirestoreUserProfile;
-          onUpdate({
-            id: doc.id,
-            ...data,
-            createdAt: data.createdAt.toDate(),
-            lastLoginAt: data.lastLoginAt.toDate(),
-          });
-        }
-      },
-      onError
-    );
+  const userRef = doc(db, USERS_COLLECTION, userId);
+  return onSnapshot(
+    userRef,
+    (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data() as FirestoreUserProfile;
+        onUpdate({
+          id: docSnap.id,
+          ...data,
+          createdAt: data.createdAt.toDate(),
+          lastLoginAt: data.lastLoginAt.toDate(),
+        });
+      }
+    },
+    onError
+  );
 } 

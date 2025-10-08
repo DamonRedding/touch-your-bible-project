@@ -1,4 +1,4 @@
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { User } from 'firebase/auth';
 
 export interface UserPreferences {
   notificationsEnabled: boolean;
@@ -29,4 +29,4 @@ export interface UserState {
   error: Error | null;
 }
 
-export type AuthUser = FirebaseAuthTypes.User; 
+export type AuthUser = User; 

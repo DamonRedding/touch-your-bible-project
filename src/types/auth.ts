@@ -1,6 +1,6 @@
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { User } from 'firebase/auth';
 
-export interface AuthUser extends FirebaseAuthTypes.User {
+export interface AuthUser extends User {
   // Add any additional user properties here
 }
 
