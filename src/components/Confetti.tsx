@@ -25,6 +25,14 @@ const CONFETTI_COLORS = [
   '#9C27B0', // secondary-500 (purple)
 ];
 
+// Spring physics constants (easy to adjust during Day 3 testing)
+// Based on react-native-reanimated withSpring defaults, optimized for confetti
+const SPRING_PHYSICS = {
+  damping: 10,     // Default: 10. Higher = settles faster (20-30 for less oscillation)
+  mass: 1,         // Default: 1. Lower = lighter/floatier (0.5 for paper-light feel)
+  stiffness: 50,   // Default: 100. Lower = less bouncy (30-50 for natural drift)
+};
+
 interface ConfettiParticleProps {
   delay: number;
   color: string;
@@ -70,11 +78,7 @@ const ConfettiParticle: React.FC<ConfettiParticleProps> = ({
 
     translateX.value = withDelay(
       delay,
-      withSpring(drift, {
-        damping: 10,
-        mass: 1,
-        stiffness: 50,
-      })
+      withSpring(drift, SPRING_PHYSICS)
     );
 
     rotate.value = withDelay(
@@ -97,7 +101,7 @@ const ConfettiParticle: React.FC<ConfettiParticleProps> = ({
     scale.value = withDelay(
       delay,
       withSpring(0.8 + Math.random() * 0.4, {
-        damping: 5,
+        damping: 5, // Lower damping for subtle scale bounce
       })
     );
   }, [delay, translateY, translateX, rotate, opacity, scale, onComplete]);
