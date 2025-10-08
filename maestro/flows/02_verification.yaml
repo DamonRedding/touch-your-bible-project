@@ -1,0 +1,38 @@
+# Maestro E2E Test: Verification Flow
+# Touch Your Bible - iOS MVP
+# Tests: Bible verification modal, success state, streak update
+
+appId: com.touchyourbible.app
+---
+# Launch app and navigate to verification
+- launchApp
+- assertVisible: "Verify Bible Reading"
+- tapOn: "Verify Bible Reading"
+
+# Verify modal opens
+# NOTE: Update selectors based on actual VerifyModal implementation
+- assertVisible: ".*camera.*|.*photo.*|.*verify.*"
+
+# Simulate successful verification
+# TODO: Add camera interaction steps when VerifyModal UX is finalized
+# Example:
+# - tapOn: "Take Photo"
+# - waitForAnimationToEnd
+# - tapOn: "Confirm"
+
+# Verify success feedback
+# - assertVisible: ".*Success.*|.*Complete.*"
+
+# Verify confetti animation (if detectable by Maestro)
+# - assertVisible: ".*confetti.*" # May not be directly testable
+
+# Verify streak increments
+# - assertVisible: "1" # Streak count
+# - assertVisible: "1 day in a row"
+
+# Verify stats update
+# - assertVisible: "10" # Points (10 per verification)
+
+# Close modal and verify dashboard updates
+# - tapOn: "Close|Done|X"
+# - assertVisible: "🔥" # Flame emoji for active streak

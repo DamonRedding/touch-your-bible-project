@@ -1,0 +1,30 @@
+# Maestro E2E Test: Onboarding Flow
+# Touch Your Bible - iOS MVP
+# Tests: First launch experience, dashboard visibility, CTA presence
+
+appId: com.touchyourbible.app # Update with your actual bundle identifier
+---
+# Launch the app
+- launchApp
+
+# Verify greeting appears (time-based: morning/afternoon/evening)
+- assertVisible: "Good.*"
+
+# Verify streak card shows for new user
+- assertVisible: "Current Streak"
+- assertVisible: "Start your streak today!"
+
+# Verify primary CTA is visible and prominent
+- assertVisible: "Verify Bible Reading"
+
+# Verify stats row renders (even with zeros)
+- assertVisible: "Total Days"
+- assertVisible: "Points"
+- assertVisible: "Global Rank"
+
+# Optional: Test tab navigation
+- tapOn: "Leaderboard.*"
+- assertVisible: "Leaderboard" # Update when screen is implemented
+
+- tapOn: "Profile.*"
+- assertVisible: "Profile" # Update with actual profile screen elements

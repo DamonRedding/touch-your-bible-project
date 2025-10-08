@@ -1,0 +1,27 @@
+# Maestro E2E Test: Tab Navigation
+# Touch Your Bible - iOS MVP
+# Tests: Bottom tab bar navigation, screen transitions
+
+appId: com.touchyourbible.app
+---
+# Launch and verify default tab (Home)
+- launchApp
+- assertVisible: "Good.*" # Dashboard greeting
+
+# Navigate to Leaderboard tab
+- tapOn: '.*trophy.*|Leaderboard' # Icon or label
+- assertVisible: "Leaderboard" # Update when screen implemented
+# TODO: Add leaderboard-specific assertions when UI is built
+
+# Navigate to Profile tab
+- tapOn: '.*account.*|.*person.*|Profile'
+- assertVisible: "Profile|Sign Out" # Profile screen elements
+# TODO: Add profile-specific assertions
+
+# Navigate back to Home tab
+- tapOn: '.*home.*|Home'
+- assertVisible: "Current Streak"
+- assertVisible: "Verify Bible Reading"
+
+# Verify tab state persists (no data reload flash)
+# NOTE: This may require additional assertions depending on loading behavior
