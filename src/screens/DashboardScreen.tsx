@@ -3,8 +3,8 @@
 // Design: Taylor (Visual Designer)
 // Created: October 7, 2025 | Updated: October 8, 2025
 
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Pressable, ActivityIndicator, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import { useAuth } from '../contexts/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { VerifyModal } from '../components/VerifyModal';
@@ -14,12 +14,16 @@ import {
   calculateLongestStreak,
   getTotalVerifications,
 } from '../services/verification';
+import * as Haptics from 'expo-haptics';
+import { Text, Button, Card, CardContent, CardTitle } from '../components/nativewindui';
 
 export default function DashboardScreen() {
   const { user, profile, signOut, isLoading } = useAuth();
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [userData, setUserData] = useState({
     currentStreak: 0,
     longestStreak: 0,
@@ -29,10 +33,16 @@ export default function DashboardScreen() {
   });
 
   // Load user data from Firestore
-  const loadUserData = async () => {
+  const loadUserData = async (isRefresh = false) => {
     if (!user) return;
 
-    setIsLoadingData(true);
+    if (isRefresh) {
+      setIsRefreshing(true);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } else {
+      setIsLoadingData(true);
+    }
+
     try {
       const [currentStreak, longestStreak, totalVerifications] = await Promise.all([
         calculateCurrentStreak(user.uid),
@@ -47,12 +57,19 @@ export default function DashboardScreen() {
         points: totalVerifications * 10, // 10 points per verification
         rank: null, // Leaderboard integration later
       });
+      setError(null);
     } catch (error) {
       console.error('Error loading user data:', error);
+      setError('Failed to load data. Pull down to retry.');
       // Keep previous data on error
     } finally {
       setIsLoadingData(false);
+      setIsRefreshing(false);
     }
+  };
+
+  const handleRefresh = () => {
+    loadUserData(true);
   };
 
   // Load data on mount and when user changes
@@ -69,10 +86,14 @@ export default function DashboardScreen() {
   };
 
   const handleVerifyPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setIsVerifyModalOpen(true);
   };
 
   const handleVerifySuccess = () => {
+    // Success haptic
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
     // Trigger confetti
     setShowConfetti(true);
 
@@ -101,78 +122,140 @@ export default function DashboardScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
-      <ScrollView className="flex-1">
+      <ScrollView
+        className="flex-1"
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            tintColor="#2196F3"
+          />
+        }
+        showsVerticalScrollIndicator={false}
+      >
         <View className="p-4">
+          {/* Error Banner */}
+          {error && (
+            <Card className="mb-4 bg-red-50 border-red-200">
+              <CardContent className="flex-row items-center">
+                <Text className="text-2xl mr-3">⚠️</Text>
+                <View className="flex-1">
+                  <Text variant="subhead" className="font-semibold text-red-900 mb-1">
+                    Connection Error
+                  </Text>
+                  <Text variant="footnote" className="text-red-700">
+                    {error}
+                  </Text>
+                </View>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Greeting */}
-          <Text className="text-[28px] font-bold text-gray-900 mb-2">
+          <Text
+            variant="largeTitle"
+            className="mb-2"
+            accessibilityRole="header"
+            accessibilityLabel={`${getGreeting()} greeting`}
+          >
             {getGreeting()}! 👋
           </Text>
-          <Text className="text-[17px] text-gray-600 mb-6">
+          <Text variant="body" color="secondary" className="mb-6">
             {user?.displayName || user?.email?.split('@')[0] || 'Friend'}
           </Text>
 
           {/* Streak Card */}
-          <View className="bg-white rounded-2xl p-6 mb-4 shadow-md">
-            <Text className="text-[15px] text-gray-600 text-center mb-2 uppercase tracking-wide">
-              Current Streak
-            </Text>
-            <Text className="text-[48px] font-bold text-center mb-2 text-gray-900">
-              {userData.currentStreak}
-            </Text>
-            <View className="flex-row justify-center mb-2">
-              {/* Show flames based on streak (max 5) */}
-              {userData.currentStreak > 0 && (
-                <Text className="text-[32px]">
-                  {'🔥'.repeat(Math.min(userData.currentStreak, 5))}
-                </Text>
-              )}
-            </View>
-            <Text className="text-[13px] text-gray-500 text-center">
-              {userData.currentStreak === 0
-                ? 'Start your streak today!'
-                : `${userData.currentStreak} ${userData.currentStreak === 1 ? 'day' : 'days'} in a row`}
-            </Text>
-          </View>
+          <Card
+            accessibilityRole="text"
+            accessibilityLabel={`Current streak: ${userData.currentStreak} ${userData.currentStreak === 1 ? 'day' : 'days'}`}
+            className="mb-4"
+          >
+            <CardContent>
+              <Text
+                variant="caption1"
+                color="secondary"
+                className="text-center mb-2 uppercase tracking-wide"
+              >
+                Current Streak
+              </Text>
+              <Text className="text-[48px] font-bold text-center mb-2">
+                {userData.currentStreak}
+              </Text>
+              <View className="flex-row justify-center mb-2">
+                {/* Show flames based on streak (max 5) */}
+                {userData.currentStreak > 0 && (
+                  <Text className="text-[32px]" accessibilityLabel="Streak fire emoji">
+                    {'🔥'.repeat(Math.min(userData.currentStreak, 5))}
+                  </Text>
+                )}
+              </View>
+              <Text variant="footnote" color="secondary" className="text-center">
+                {userData.currentStreak === 0
+                  ? '🎯 Start your streak today!'
+                  : `${userData.currentStreak} ${userData.currentStreak === 1 ? 'day' : 'days'} in a row`}
+              </Text>
+            </CardContent>
+          </Card>
 
           {/* Verify Button (Primary CTA) */}
-          <Pressable
+          <Button
+            variant="primary"
+            size="lg"
             onPress={handleVerifyPress}
-            className="bg-[#2196F3] active:bg-[#1E88E5] py-5 px-6 rounded-2xl mb-4 shadow-lg active:opacity-95"
-            accessibilityLabel="Open verification modal"
-            accessibilityRole="button"
+            className="mb-4 shadow-lg w-full"
+            accessibilityLabel="Open verification modal to verify today's Bible reading"
+            accessibilityHint="Double tap to open camera and verify your Bible reading"
           >
-            <Text className="text-white text-[19px] font-bold text-center">
-              ✅ Verify Bible Reading
-            </Text>
-            <Text className="text-white/80 text-[13px] text-center mt-1">
-              Tap to verify today's reading
-            </Text>
-          </Pressable>
+            <View className="items-center">
+              <Text variant="headline" className="text-white font-bold">
+                ✅ Verify Bible Reading
+              </Text>
+              <Text variant="caption1" className="text-white/80 mt-1">
+                Tap to verify today's reading
+              </Text>
+            </View>
+          </Button>
 
           {/* Quick Stats Row */}
-          <View className="flex-row justify-between px-2">
+          <View className="flex-row justify-between px-2" accessibilityRole="summary">
             {/* Total Days */}
-            <View className="items-center">
-              <Text className="text-[24px] font-bold text-gray-900">
+            <View
+              className="items-center"
+              accessibilityLabel={`Total verifications: ${userData.totalVerifications} days`}
+            >
+              <Text variant="title2" className="font-bold">
                 {userData.totalVerifications}
               </Text>
-              <Text className="text-[13px] text-gray-600">Total Days</Text>
+              <Text variant="caption1" color="secondary">
+                Total Days
+              </Text>
             </View>
 
             {/* Points */}
-            <View className="items-center">
-              <Text className="text-[24px] font-bold text-gray-900">
+            <View className="items-center" accessibilityLabel={`Total points: ${userData.points}`}>
+              <Text variant="title2" className="font-bold">
                 {userData.points}
               </Text>
-              <Text className="text-[13px] text-gray-600">Points</Text>
+              <Text variant="caption1" color="secondary">
+                Points
+              </Text>
             </View>
 
             {/* Rank */}
-            <View className="items-center">
-              <Text className="text-[24px] font-bold text-gray-900">
+            <View
+              className="items-center"
+              accessibilityLabel={
+                userData.rank
+                  ? `Global rank: ${userData.rank}`
+                  : 'Complete 3 days to unlock global rank'
+              }
+            >
+              <Text variant="title2" className="font-bold">
                 {userData.rank ? `#${userData.rank}` : '---'}
               </Text>
-              <Text className="text-[13px] text-gray-600">Global Rank</Text>
+              <Text variant="caption1" color="secondary">
+                Global Rank
+              </Text>
             </View>
           </View>
         </View>
