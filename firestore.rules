@@ -1,0 +1,128 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================
+    // HELPER FUNCTIONS
+    // ============================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidEmail(email) {
+      return email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+
+    function isValidInviteCode(code) {
+      return code.matches('^TOUCH-[A-Z0-9]{4}$');
+    }
+
+    // ============================================
+    // USERS COLLECTION
+    // ============================================
+
+    match /users/{userId} {
+      // Read: Anyone can read user profiles (for leaderboards)
+      allow read: if isSignedIn();
+
+      // Create: Only on signup, must be own user
+      allow create: if isOwner(userId)
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.currentStreak == 0
+        && request.resource.data.points == 0
+        && request.resource.data.inviteCount == 0
+        && isValidInviteCode(request.resource.data.inviteCode);
+
+      // Update: Only own profile, with validation
+      allow update: if isOwner(userId)
+        // Prevent tampering with critical fields
+        && request.resource.data.email == resource.data.email // Cannot change email
+        && request.resource.data.createdAt == resource.data.createdAt // Cannot change creation date
+        && request.resource.data.inviteCode == resource.data.inviteCode // Cannot change invite code
+        // Prevent point manipulation
+        && request.resource.data.inviteCount <= 5 // Max 5 invites
+        && request.resource.data.invitePoints <= 50 // Max 50 invite points
+        && request.resource.data.invitePoints == request.resource.data.inviteCount * 10 // Correct calculation
+        && request.resource.data.points == (request.resource.data.streakPoints + request.resource.data.invitePoints); // Correct total
+
+      // Delete: Only own profile (for GDPR compliance)
+      allow delete: if isOwner(userId);
+
+      // ============================================
+      // FRIENDS SUBCOLLECTION
+      // ============================================
+
+      match /friends/{friendId} {
+        // Read: Only owner can read their friends
+        allow read: if isOwner(userId);
+
+        // Create: Only owner can add friends
+        allow create: if isOwner(userId)
+          && request.resource.data.userId == friendId; // Prevent ID mismatch
+
+        // Update: Only owner can update friend data (for sync)
+        allow update: if isOwner(userId);
+
+        // Delete: Only owner can remove friends
+        allow delete: if isOwner(userId);
+      }
+
+      // ============================================
+      // VERIFICATIONS SUBCOLLECTION (Optional)
+      // ============================================
+
+      match /verifications/{verificationId} {
+        // Read: Only owner can read their verifications
+        allow read: if isOwner(userId);
+
+        // Create: Only owner can create verifications
+        allow create: if isOwner(userId)
+          && request.resource.data.userId == userId
+          && request.resource.data.method == 'honor-system'; // MVP: honor system only
+
+        // Update/Delete: Not allowed (immutable logs)
+        allow update: if false;
+        allow delete: if false;
+      }
+    }
+
+    // ============================================
+    // INVITES COLLECTION
+    // ============================================
+
+    match /invites/{inviteCode} {
+      // Read: Anyone can read invite codes (to validate)
+      allow read: if isSignedIn();
+
+      // Create: Only on user creation, must match user's code
+      allow create: if isSignedIn()
+        && isValidInviteCode(inviteCode)
+        && request.resource.data.code == inviteCode
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.useCount == 0
+        && request.resource.data.maxUses == 5
+        && request.resource.data.isActive == true;
+
+      // Update: Only creator or redeemer (via transaction)
+      allow update: if isSignedIn()
+        // Prevent tampering
+        && request.resource.data.code == resource.data.code // Cannot change code
+        && request.resource.data.createdBy == resource.data.createdBy // Cannot change creator
+        && request.resource.data.createdAt == resource.data.createdAt // Cannot change creation date
+        && request.resource.data.maxUses == resource.data.maxUses // Cannot change max uses
+        // Validate use count
+        && request.resource.data.useCount <= 5
+        && request.resource.data.useCount >= resource.data.useCount // Cannot decrease
+        && request.resource.data.usedBy.size() == request.resource.data.useCount // Array matches count
+        && request.resource.data.isActive == (request.resource.data.useCount < 5); // Correct active state
+
+      // Delete: Never allowed (keep audit trail)
+      allow delete: if false;
+    }
+  }
+}
